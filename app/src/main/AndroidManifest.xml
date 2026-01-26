@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BlogApp">
         <activity
+            android:name=".AddArticleActivity"
+            android:exported="false" />
+        <activity
             android:name=".SignInAndRegistrationActivity"
             android:exported="false" />
         <activity
