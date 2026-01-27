@@ -24,76 +24,86 @@ class AddArticleActivity : AppCompatActivity() {
         ActivityAddArticleBinding.inflate(layoutInflater)
     }
     private val databaseReference: DatabaseReference =
-        FirebaseDatabase.getInstance("https://blog-app-e2190-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("blogs")
+        FirebaseDatabase.getInstance("https://blog-app-e2190-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference("blogs")
     private val userReference: DatabaseReference =
-        FirebaseDatabase.getInstance("https://blog-app-e2190-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users")
+        FirebaseDatabase.getInstance("https://blog-app-e2190-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference("users")
     private val auth =
         FirebaseAuth.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
+
+        binding.backButton1.setOnClickListener {
+            finish()
+        }
 
         binding.addBlogButton.setOnClickListener {
 
             val blogTitle = binding.blogTitle.editText?.text.toString().trim()
             val description = binding.blogDescription.editText?.text.toString().trim()
 
-            if(blogTitle.isEmpty()||description.isEmpty()){
+            if (blogTitle.isEmpty() || description.isEmpty()) {
 
                 Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show()
             }
 
             //get current user
-            val user : FirebaseUser?= auth.currentUser
+            val user: FirebaseUser? = auth.currentUser
 
-            if(user != null){
+            if (user != null) {
                 val userId = user.uid
-                val userName = user.displayName?:"Anonymous"
-                val userImageUrl = user.photoUrl?:""
+                val userName = user.displayName ?: "Anonymous"
+                val userImageUrl = user.photoUrl ?: ""
 
                 //fetch user name and user profile from database
-                userReference.child(userId).addListenerForSingleValueEvent(object : ValueEventListener{
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val userData = snapshot.getValue(UserData::class.java)
-                        if(userData != null){
-                            val userNameFromDB = userData.name
-                            val userImageUrlFromDB = userData.profileImage
+                userReference.child(userId)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val userData = snapshot.getValue(UserData::class.java)
+                            if (userData != null) {
+                                val userNameFromDB = userData.name
+                                val userImageUrlFromDB = userData.profileImage
 
-                            val currentDate = SimpleDateFormat("yyyy-MM-dd").format(Date())
+                                val currentDate = SimpleDateFormat("yyyy-MM-dd").format(Date())
 
-                            //create a blogItemModel
-                            val blogItem = BlogItemModel(
-                                blogTitle,
-                                userNameFromDB,
-                                currentDate,
-                                description,
-                                0,
-                                userImageUrlFromDB
-                            )
+                                //create a blogItemModel
+                                val blogItem = BlogItemModel(
+                                    blogTitle,
+                                    userNameFromDB,
+                                    currentDate,
+                                    description,
+                                    0,
+                                    userImageUrlFromDB
+                                )
 
-                            //generate a unique key for the blog post
-                            val key = databaseReference.push().key
-                            if(key != null) {
-                                val blogReference = databaseReference.child(key)
-                                blogReference.setValue(blogItem).addOnCompleteListener {
-                                    if (it.isSuccessful){
-                                        finish()
-                                } else{
-                                        Toast.makeText(
-                                            this@AddArticleActivity,
-                                            "Failed to add blog",
-                                            Toast.LENGTH_SHORT).show()
+                                //generate a unique key for the blog post
+                                val key = databaseReference.push().key
+                                if (key != null) {
+                                    blogItem.postId = key
+                                    val blogReference = databaseReference.child(key)
+                                    blogReference.setValue(blogItem).addOnCompleteListener {
+                                        if (it.isSuccessful) {
+                                            finish()
+                                        } else {
+                                            Toast.makeText(
+                                                this@AddArticleActivity,
+                                                "Failed to add blog",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    override fun onCancelled(error: DatabaseError) {
+                        override fun onCancelled(error: DatabaseError) {
 
-                    }
-                })
+                        }
+                    })
             }
         }
     }
