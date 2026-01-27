@@ -27,8 +27,7 @@ class BlogAdapter(private val items: List<BlogItemModel>) :
 
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): BlogViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = BlogItemBinding.inflate(inflater, parent, false)
@@ -36,8 +35,7 @@ class BlogAdapter(private val items: List<BlogItemModel>) :
     }
 
     override fun onBindViewHolder(
-        holder: BlogViewHolder,
-        position: Int
+        holder: BlogViewHolder, position: Int
     ) {
         val blogItem = items[position]
         holder.bind(blogItem)
@@ -56,8 +54,7 @@ class BlogAdapter(private val items: List<BlogItemModel>) :
             //bind data to views
             binding.heading.text = blogItemModel.heading
             binding.username.text = blogItemModel.username
-            Glide.with(binding.profile.context)
-                .load(blogItemModel.profileImage)
+            Glide.with(binding.profile.context).load(blogItemModel.profileImage)
                 .into(binding.profile)
             binding.date.text = blogItemModel.date
             binding.blogpost.text = blogItemModel.post
@@ -77,20 +74,20 @@ class BlogAdapter(private val items: List<BlogItemModel>) :
             val postLikeReference: DatabaseReference =
                 databaseReference.child("blogs").child(postId).child("likes")
             val currentUserLiked = currentUser?.uid.let { uid ->
-                postLikeReference.child(uid ?: "").addListenerForSingleValueEvent(object :
-                    ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.exists()) {
-                            binding.likebutton.setImageResource(R.drawable.red_heart_icon)
-                        } else {
-                            binding.likebutton.setImageResource(R.drawable.black_heart_icon)
+                postLikeReference.child(uid ?: "")
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.exists()) {
+                                binding.likebutton.setImageResource(R.drawable.red_heart_icon)
+                            } else {
+                                binding.likebutton.setImageResource(R.drawable.black_heart_icon)
+                            }
                         }
-                    }
 
-                    override fun onCancelled(error: DatabaseError) {
-                    }
+                        override fun onCancelled(error: DatabaseError) {
+                        }
 
-                })
+                    })
 
 
             }
@@ -106,14 +103,22 @@ class BlogAdapter(private val items: List<BlogItemModel>) :
                 }
             }
 
+            //handle save button clicks
+            binding.savebutton.setOnClickListener {
+                if (currentUser != null) {
+                    handleSaveButtonClicked(postId, blogItemModel, binding)
+                } else {
+                    Toast.makeText(context, "Please login to save the blog", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+
         }
 
     }
 
     private fun handleLikeButtonClicked(
-        postId: String,
-        blogItemModel: BlogItemModel,
-        binding: BlogItemBinding
+        postId: String, blogItemModel: BlogItemModel, binding: BlogItemBinding
     ) {
         val userReference = databaseReference.child("users").child(currentUser!!.uid)
         val postLikeReference = databaseReference.child("blogs").child(postId).child("likes")
@@ -159,8 +164,7 @@ class BlogAdapter(private val items: List<BlogItemModel>) :
                                     .setValue(newLikeCount)
                                 notifyDataSetChanged()
 
-                            }
-                            .addOnFailureListener { e ->
+                            }.addOnFailureListener { e ->
 
                                 Log.e("LikeClicked", "onDataChange: Failed to like the block $e")
 
@@ -180,6 +184,65 @@ class BlogAdapter(private val items: List<BlogItemModel>) :
     private fun updateLikeButtonImage(binding: BlogItemBinding, liked: Boolean) {
 
         binding.likebutton.setImageResource(if (liked) R.drawable.red_heart_icon else R.drawable.black_heart_icon)
+
+
+    }
+
+    private fun handleSaveButtonClicked(
+        postId: String, blogItemModel: BlogItemModel, binding: BlogItemBinding
+    ) {
+        val userReference = databaseReference.child("users").child(currentUser!!.uid)
+        userReference.child("saved").child(postId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        // the blog is currently saved then unsave it
+                        userReference.child("saved").child(postId).removeValue()
+                            .addOnSuccessListener {
+                                //update the UI
+                                val clickedBlogItem = items.find { it.postId == postId }
+                                clickedBlogItem?.isSaved = false
+                                notifyDataSetChanged()
+
+                                val context = binding.root.context
+                                Toast.makeText(context, "Blog unsaved", Toast.LENGTH_SHORT).show()
+                            }.addOnFailureListener {
+
+                                val context = binding.root.context
+                                Toast.makeText(context, "Failed to unsave blog", Toast.LENGTH_SHORT)
+                                    .show()
+
+                            }
+
+                        binding.savebutton.setImageResource(R.drawable.bookmark_icon)
+                    } else {
+                        //the blog is not saved then save it
+                        userReference.child("saved").child(postId).setValue(true)
+                            .addOnSuccessListener {
+                                //update the UI
+                                val clickedBlogItem = items.find { it.postId == postId }
+                                clickedBlogItem?.isSaved = true
+                                notifyDataSetChanged()
+
+                                val context = binding.root.context
+                                Toast.makeText(context, "Blog saved", Toast.LENGTH_SHORT).show()
+                            }.addOnFailureListener {
+                                val context = binding.root.context
+                                Toast.makeText(context, "Failed to save blog", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+
+                        //change the save button image
+                        binding.savebutton.setImageResource(R.drawable.bookmark3_icon)
+
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
 
 
     }
