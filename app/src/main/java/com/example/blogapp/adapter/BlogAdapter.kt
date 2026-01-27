@@ -103,6 +103,26 @@ class BlogAdapter(private val items: List<BlogItemModel>) :
                 }
             }
 
+
+            //set the initial icon based on the saved status
+            val userReference = databaseReference.child("users").child(currentUser!!.uid ?: "")
+            val postSaveReference = userReference.child("saved").child(postId)
+            postSaveReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        binding.savebutton.setImageResource(R.drawable.bookmark_icon)
+                    } else {
+                        binding.savebutton.setImageResource(R.drawable.bookmark3_icon)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+
+
             //handle save button clicks
             binding.savebutton.setOnClickListener {
                 if (currentUser != null) {
