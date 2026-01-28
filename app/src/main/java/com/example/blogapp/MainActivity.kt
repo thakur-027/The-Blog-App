@@ -26,6 +26,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+
+        //to go to saved article page
+        binding.saveArticleButton.setOnClickListener {
+            startActivity(Intent(this, SavedArticlesActivity::class.java))
+        }
+
+
+
+
         auth = FirebaseAuth.getInstance()
 
         // Ensure this matches your "Blogs" or "blogs" path in Firebase
@@ -47,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = blogAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        //fetch data from firebase databse
+        //fetch data from firebase database
         databaseReference.addValueEventListener(object : ValueEventListener{
             @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(snapshot: DataSnapshot) {

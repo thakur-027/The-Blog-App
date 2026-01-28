@@ -19,7 +19,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.handleCoroutineException
 
 
-class BlogAdapter(private val items: List<BlogItemModel>) :
+class BlogAdapter(private val items: MutableList<BlogItemModel>) :
     RecyclerView.Adapter<BlogAdapter.BlogViewHolder>() {
     private val databaseReference: DatabaseReference =
         FirebaseDatabase.getInstance("https://blog-app-e2190-default-rtdb.asia-southeast1.firebasedatabase.app").reference
@@ -110,9 +110,9 @@ class BlogAdapter(private val items: List<BlogItemModel>) :
             postSaveReference.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
-                        binding.savebutton.setImageResource(R.drawable.bookmark_icon)
-                    } else {
                         binding.savebutton.setImageResource(R.drawable.bookmark3_icon)
+                    } else {
+                        binding.savebutton.setImageResource(R.drawable.bookmark_icon)
                     }
                 }
 
@@ -265,5 +265,11 @@ class BlogAdapter(private val items: List<BlogItemModel>) :
             })
 
 
+    }
+
+    fun updateData(savedBlogArticles: List<BlogItemModel>) {
+        items.clear()
+        items.addAll(savedBlogArticles)
+        notifyDataSetChanged()
     }
 }
