@@ -11,7 +11,9 @@ import com.example.blogapp.adapter.BlogAdapter
 import com.example.blogapp.adapter.BlogItemModel
 import com.example.blogapp.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.* // FIX: Ensure this import is present
+import com.google.firebase.database.*
+import androidx.activity.enableEdgeToEdge
+
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(binding.root)
 
 
