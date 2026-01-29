@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.blogapp.adapter.BlogAdapter
-import com.example.blogapp.adapter.BlogItemModel
+import com.example.blogapp.Model.BlogItemModel
 import com.example.blogapp.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -33,6 +33,11 @@ class MainActivity : AppCompatActivity() {
         //to go to saved article page
         binding.saveArticleButton.setOnClickListener {
             startActivity(Intent(this, SavedArticlesActivity::class.java))
+        }
+
+        //to go to profile activity
+        binding.profileImage.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
         }
 
 

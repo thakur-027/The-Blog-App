@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
-import com.example.blogapp.adapter.BlogItemModel
+import com.example.blogapp.Model.BlogItemModel
 import com.example.blogapp.databinding.ActivityReadMoreBinding
 
 class ReadMoreActivity : AppCompatActivity() {

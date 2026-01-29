@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.blogapp.Model.UserData
-import com.example.blogapp.adapter.BlogItemModel
+import com.example.blogapp.Model.BlogItemModel
 import com.example.blogapp.databinding.ActivityAddArticleBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -41,7 +41,7 @@ class AddArticleActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.addBlogButton.setOnClickListener {
+        binding.saveBlogButton.setOnClickListener {
 
             val blogTitle = binding.blogTitle.editText?.text.toString().trim()
             val description = binding.blogDescription.editText?.text.toString().trim()
@@ -76,6 +76,7 @@ class AddArticleActivity : AppCompatActivity() {
                                     userNameFromDB,
                                     currentDate,
                                     description,
+                                    userId,
                                     0,
                                     userImageUrlFromDB
                                 )

@@ -1,14 +1,14 @@
-package com.example.blogapp.adapter
+package com.example.blogapp.Model
 
-import android.R
 import android.os.Parcel
 import android.os.Parcelable
 
 data class BlogItemModel(
-    val heading: String = "null",
+    var heading: String = "null",
     val username: String = "null",
     val date: String = "null",
-    val post: String = "null",
+    var post: String = "null",
+    val userId: String ?= "null",
     var likecount: Int = 0,
     val profileImage: String = "null",
     var postId: String = "null",
@@ -16,6 +16,7 @@ data class BlogItemModel(
     var isSaved: Boolean = false
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
@@ -35,10 +36,12 @@ data class BlogItemModel(
         parcel.writeString(username)
         parcel.writeString(date)
         parcel.writeString(post)
+        parcel.writeString(userId)
         parcel.writeInt(likecount)
         parcel.writeString(profileImage)
         parcel.writeString(postId)
         parcel.writeStringList(likedBy)
+
         parcel.writeByte(if (isSaved) 1 else 0)
     }
 

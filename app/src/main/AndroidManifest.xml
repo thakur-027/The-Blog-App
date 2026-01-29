@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BlogApp">
         <activity
+            android:name=".EditBlogActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ArticlesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".SavedArticlesActivity"
             android:exported="false" />
         <activity

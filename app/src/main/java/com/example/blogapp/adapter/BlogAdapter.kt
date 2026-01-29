@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.blogapp.Model.BlogItemModel
 import com.example.blogapp.R
 import com.example.blogapp.ReadMoreActivity
 import com.example.blogapp.databinding.BlogItemBinding

@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.blogapp.adapter.BlogAdapter
-import com.example.blogapp.adapter.BlogItemModel
+import com.example.blogapp.Model.BlogItemModel
 import com.example.blogapp.databinding.ActivitySavedArticlesBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
