@@ -194,7 +194,7 @@ The generated APK will be located in `app/build/outputs/apk/`
 2. Update your user information
 3. View your published posts
 
-## Architecture
+## Architecture of the app
 
 This application follows modern Android architecture patterns:
 
