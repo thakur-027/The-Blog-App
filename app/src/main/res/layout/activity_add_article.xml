@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_blue_shape"
             android:fontFamily="@font/montserrat_medium"
-            android:hint="Blog Title"
+            android:hint=""
             android:textColor="@color/blue" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,7 +90,7 @@
             android:background="@drawable/edit_text_shape"
             android:fontFamily="@font/montserrat_medium"
             android:gravity="top"
-            android:hint="Blog Description"
+            android:hint=""
             android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
