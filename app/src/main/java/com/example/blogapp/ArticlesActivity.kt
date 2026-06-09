@@ -73,7 +73,7 @@ if(currentUserId != null) {
 
 
         //get saved blog data
-        databaseReference = FirebaseDatabase.getInstance("https://blog-app-e2190-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("blogs")
+        databaseReference = FirebaseDatabase.getInstance("https://the-blog-app-157c1-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("blogs")
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

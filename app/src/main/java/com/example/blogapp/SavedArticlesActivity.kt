@@ -42,7 +42,7 @@ class SavedArticlesActivity : AppCompatActivity() {
         val userId = auth.currentUser?.uid
         if (userId != null) {
             val userReference =
-                FirebaseDatabase.getInstance("https://blog-app-e2190-default-rtdb.asia-southeast1.firebasedatabase.app")
+                FirebaseDatabase.getInstance("https://the-blog-app-157c1-default-rtdb.asia-southeast1.firebasedatabase.app")
                     .getReference("users").child(userId).child("saved")
 
             userReference.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -73,7 +73,7 @@ class SavedArticlesActivity : AppCompatActivity() {
 
                 private suspend fun fetchBlogItem(postId: String): BlogItemModel? {
                     val blogReference =
-                        FirebaseDatabase.getInstance("https://blog-app-e2190-default-rtdb.asia-southeast1.firebasedatabase.app")
+                        FirebaseDatabase.getInstance("https://the-blog-app-157c1-default-rtdb.asia-southeast1.firebasedatabase.app")
                             .getReference("blogs")
 
                     return try {

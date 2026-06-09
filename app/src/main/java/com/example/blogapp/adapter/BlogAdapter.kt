@@ -23,7 +23,7 @@ import kotlinx.coroutines.handleCoroutineException
 class BlogAdapter(private val items: MutableList<BlogItemModel>) :
     RecyclerView.Adapter<BlogAdapter.BlogViewHolder>() {
     private val databaseReference: DatabaseReference =
-        FirebaseDatabase.getInstance("https://blog-app-e2190-default-rtdb.asia-southeast1.firebasedatabase.app").reference
+        FirebaseDatabase.getInstance("https://the-blog-app-157c1-default-rtdb.asia-southeast1.firebasedatabase.app").reference
     private val currentUser = FirebaseAuth.getInstance().currentUser
 
 

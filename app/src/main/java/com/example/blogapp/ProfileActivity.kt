@@ -55,7 +55,7 @@ class ProfileActivity : AppCompatActivity() {
         //initialize firebase
         auth = FirebaseAuth.getInstance()
         databaseReference =
-            FirebaseDatabase.getInstance("https://blog-app-e2190-default-rtdb.asia-southeast1.firebasedatabase.app").reference.child(
+            FirebaseDatabase.getInstance("https://the-blog-app-157c1-default-rtdb.asia-southeast1.firebasedatabase.app").reference.child(
                 "users"
             )
 

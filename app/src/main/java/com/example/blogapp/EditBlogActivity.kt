@@ -49,7 +49,7 @@ class EditBlogActivity : AppCompatActivity() {
     }
 
     private fun updateDataInFirebase(blogItemModel: BlogItemModel) {
-        val databaseReference = FirebaseDatabase.getInstance("https://blog-app-e2190-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("blogs")
+        val databaseReference = FirebaseDatabase.getInstance("https://the-blog-app-157c1-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("blogs")
         val postId = blogItemModel.postId
 
         databaseReference.child(postId).setValue(blogItemModel)
