@@ -1,44 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="12dp"
+    android:layout_marginHorizontal="4dp"
     android:layout_marginVertical="8dp"
-    android:elevation="6dp">
-
+    android:elevation="6dp"
+    app:cardCornerRadius="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
+        <!-- Blog Title -->
 
         <TextView
             android:id="@+id/heading"
-            android:layout_width="230dp"
+            android:layout_width="0dp"
             android:layout_height="46dp"
             android:layout_marginStart="9dp"
             android:layout_marginTop="13dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
             android:fontFamily="@font/montserrat_medium"
             android:maxLines="2"
-            android:text="Please start writing your
-             blog"
+            android:text="Please start writing your blog"
             android:textColor="@color/blue"
             android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/cardView3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Profile Image -->
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView3"
             android:layout_width="36dp"
             android:layout_height="36dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="6dp"
             app:cardCornerRadius="100dp"
             app:cardElevation="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/username"
-            app:layout_constraintEnd_toStartOf="@+id/username"
-            app:layout_constraintStart_toEndOf="@+id/heading"
-            app:layout_constraintTop_toTopOf="@+id/username">
+            app:layout_constraintEnd_toStartOf="@id/username"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/profile"
@@ -46,36 +51,41 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/malepfp" />
+
         </androidx.cardview.widget.CardView>
+
+        <!-- Username -->
 
         <TextView
             android:id="@+id/username"
-            android:layout_width="70dp"
-            android:layout_height="44dp"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="13dp"
             android:layout_marginEnd="9dp"
+            android:ellipsize="end"
             android:fontFamily="@font/montserrat_medium"
-            android:gravity="center"
-            android:maxLines="2"
-            android:padding="5dp"
+            android:maxLines="1"
             android:text="New Blogger"
-            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Date -->
+
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:fontFamily="@font/montserrat_medium"
             android:text="Jan 16, 2026"
             android:textColor="@color/date_color"
-            app:layout_constraintEnd_toEndOf="@+id/username"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/cardView3"
-            app:layout_constraintTop_toBottomOf="@+id/username" />
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@id/username"
+            app:layout_constraintTop_toBottomOf="@id/username" />
+
+        <!-- Divider -->
 
         <View
             android:id="@+id/divider"
@@ -83,9 +93,11 @@
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
             android:background="?android:attr/listDivider"
-            app:layout_constraintEnd_toEndOf="@+id/username"
-            app:layout_constraintStart_toStartOf="@+id/heading"
-            app:layout_constraintTop_toBottomOf="@+id/date" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/heading"
+            app:layout_constraintTop_toBottomOf="@id/date" />
+
+        <!-- Blog Content -->
 
         <TextView
             android:id="@+id/blogpost"
@@ -96,13 +108,13 @@
             android:letterSpacing="0.03"
             android:lineHeight="22sp"
             android:maxLines="4"
-            android:text="The analysis is based on anonymised datasets provided as part of the UIDAI Data Hackathon. The datasets represent aggregated records related to Aadhaar enrolment, demographic characteristics,
-             and biometric updates across different regions and time periods."
-
+            android:text="The analysis is based on anonymised datasets provided as part of the UIDAI Data Hackathon. The datasets represent aggregated records related to Aadhaar enrolment, demographic characteristics, and biometric updates across different regions and time periods."
             android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="@+id/divider"
-            app:layout_constraintStart_toStartOf="@+id/divider"
-            app:layout_constraintTop_toTopOf="@+id/divider" />
+            app:layout_constraintEnd_toEndOf="@id/divider"
+            app:layout_constraintStart_toStartOf="@id/divider"
+            app:layout_constraintTop_toBottomOf="@id/divider" />
+
+        <!-- Read More Button -->
 
         <Button
             android:id="@+id/readmorebutton"
@@ -112,8 +124,10 @@
             android:text="Read More"
             app:cornerRadius="9dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/blogpost"
-            app:layout_constraintTop_toBottomOf="@+id/blogpost" />
+            app:layout_constraintStart_toStartOf="@id/blogpost"
+            app:layout_constraintTop_toBottomOf="@id/blogpost" />
+
+        <!-- Like Count -->
 
         <TextView
             android:id="@+id/likecount"
@@ -124,9 +138,11 @@
             android:text="20"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/readmorebutton"
-            app:layout_constraintStart_toEndOf="@+id/readmorebutton"
-            app:layout_constraintTop_toTopOf="@+id/readmorebutton" />
+            app:layout_constraintBottom_toBottomOf="@id/readmorebutton"
+            app:layout_constraintStart_toEndOf="@id/readmorebutton"
+            app:layout_constraintTop_toTopOf="@id/readmorebutton" />
+
+        <!-- Like Button -->
 
         <ImageButton
             android:id="@+id/likebutton"
@@ -134,10 +150,12 @@
             android:layout_height="24dp"
             android:layout_marginStart="8dp"
             android:background="@android:color/transparent"
-            app:layout_constraintBottom_toBottomOf="@+id/likecount"
-            app:layout_constraintStart_toEndOf="@+id/likecount"
-            app:layout_constraintTop_toTopOf="@+id/likecount"
+            app:layout_constraintBottom_toBottomOf="@id/likecount"
+            app:layout_constraintStart_toEndOf="@id/likecount"
+            app:layout_constraintTop_toTopOf="@id/likecount"
             app:srcCompat="@drawable/black_heart_icon" />
+
+        <!-- Save Button -->
 
         <ImageButton
             android:id="@+id/savebutton"
@@ -145,22 +163,11 @@
             android:layout_height="24dp"
             android:layout_marginStart="8dp"
             android:background="@android:color/transparent"
-            app:layout_constraintBottom_toBottomOf="@+id/likebutton"
-            app:layout_constraintStart_toEndOf="@+id/likebutton"
-            app:layout_constraintTop_toTopOf="@+id/likebutton"
+            app:layout_constraintBottom_toBottomOf="@id/likebutton"
+            app:layout_constraintStart_toEndOf="@id/likebutton"
+            app:layout_constraintTop_toTopOf="@id/likebutton"
             app:srcCompat="@drawable/bookmark_icon" />
 
-        <androidx.constraintlayout.widget.Barrier
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="right"
-            app:constraint_referenced_ids="heading" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="right"
-            app:constraint_referenced_ids="cardView3" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.cardview.widget.CardView>

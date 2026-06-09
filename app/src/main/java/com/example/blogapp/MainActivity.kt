@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         // Ensure this matches your "Blogs" or "blogs" path in Firebase
-        databaseReference = FirebaseDatabase.getInstance("https://blog-app-e2190-default-rtdb.asia-southeast1.firebasedatabase.app")
+        databaseReference = FirebaseDatabase.getInstance("https://the-blog-app-157c1-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference("blogs")
 
         val userId = auth.currentUser?.uid
@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadUserProfileImage(userId: String) {
-        val userReference = FirebaseDatabase.getInstance("https://blog-app-e2190-default-rtdb.asia-southeast1.firebasedatabase.app")
+        val userReference = FirebaseDatabase.getInstance("https://the-blog-app-157c1-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference("users").child(userId)
 
         userReference.child("profileImage").addValueEventListener(object : ValueEventListener {
