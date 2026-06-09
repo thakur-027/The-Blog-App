@@ -1,314 +1,165 @@
-# The Blog App
+<h1 align="center">📝 The Blog App</h1>
 
-An Android application built with Kotlin for creating and managing blog content.
+<p align="center">
+  A native Android blogging platform built with <strong>Kotlin</strong> and modern Jetpack libraries
+</p>
 
-## Table of Contents
+<p align="center">
+  <img src="https://img.shields.io/badge/Kotlin-100%25-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Android-API%2021+-3DDC84?style=for-the-badge&logo=android&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Architecture-MVVM-blue?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/License-Open%20Source-green?style=for-the-badge"/>
+</p>
 
-- [Overview](#overview)
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Project Structure](#project-structure)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Building the Project](#building-the-project)
-- [Usage](#usage)
-- [Architecture](#architecture)
-- [Contributing](#contributing)
-- [License](#license)
+<p align="center">
+  <img src="https://img.shields.io/badge/Room-Database-FF6B35?style=flat-square&logo=sqlite"/>
+  <img src="https://img.shields.io/badge/Jetpack-ViewModel%20%7C%20LiveData%20%7C%20Navigation-4285F4?flat-square&logo=jetpackcompose"/>
+  <img src="https://img.shields.io/badge/UI-Material%20Design%203-757575?flat-square&logo=materialdesign"/>
+</p>
+
+---
 
 ## Overview
 
-The Blog App is a native Android application designed to provide users with a platform for creating, reading, and managing blog posts. Built entirely in Kotlin, this application demonstrates modern Android development practices and clean architecture principles.
+The Blog App is a native Android application that lets users **create, read, and manage blog posts** entirely from their device. It demonstrates clean Android architecture with local data persistence, lifecycle-aware components, and a fluid Material Design interface - written entirely in Kotlin.
+
+---
+
+## Screenshots
+
+<p align="center">
+  <img src="contents/screen_login.png" width="180" alt="Login Screen"/>
+  &nbsp;&nbsp;
+  <img src="contents/screen_feed.png" width="180" alt="News Feed"/>
+  &nbsp;&nbsp;
+  <img src="contents/screen_add_blog.png" width="180" alt="Add Blog"/>
+  &nbsp;&nbsp;
+  <img src="contents/screen_articles.png" width="180" alt="Your Articles"/>
+  &nbsp;&nbsp;
+  <img src="contents/screen_profile.png" width="180" alt="Profile"/>
+</p>
+
+<p align="center">
+  <sub>Login &nbsp;|&nbsp; News Feed &nbsp;|&nbsp; Add Blog &nbsp;|&nbsp; Your Articles &nbsp;|&nbsp; Profile</sub>
+</p>
+
+---
 
 ## Features
 
-- 📝 Create and publish blog posts
-- 📖 Read blog content
-- 🔍 Search and filter blog posts
-- 👤 User profile management
-- 💾 Local data persistence
-- 🎨 Modern Material Design UI
-- 📱 Responsive layouts for different screen sizes
+- **🔐 Auth Flow** — Login & Register screens with form validation
+- **📰 News Feed** — Scrollable feed of all published posts with search bar
+- **❤️ Like & Bookmark** — React to posts directly from the feed
+- **📝 Create & Publish** — Add a new blog with title and description
+- **✏️ Edit & Delete** — Full CRUD on your own articles
+- **👤 Profile Screen** — View your info and manage your content
+- **💾 Offline-First** — All data persisted locally with Room Database
 
-## Technology Stack
+---
 
-### Core Technologies
-- **Language**: Kotlin 100%
-- **Platform**: Android
-- **Build System**: Gradle (Kotlin DSL)
+## Tech Stack
 
-### Android Components
-- Android SDK
-- Jetpack Components
-  - ViewModel
-  - LiveData
-  - Room Database
-  - Navigation Component
-  - Data Binding
+| Category | Technology |
+|---|---|
+| Language | Kotlin (100%) |
+| Architecture | MVVM (Model-View-ViewModel) |
+| UI | XML Layouts · Data Binding · Material Design 3 |
+| Lifecycle | ViewModel · LiveData |
+| Navigation | Jetpack Navigation Component |
+| Local Storage | Room Database (SQLite) |
+| Build | Gradle (Kotlin DSL) |
 
-### Development Tools
-- Android Studio
-- Gradle Build Tool
-- Git for version control
+---
+
+## Architecture
+
+The app follows a clean MVVM layered architecture:
+
+```
+┌──────────────────────────────┐
+│       Presentation Layer     │  Activities · Fragments · XML
+├──────────────────────────────┤
+│        ViewModel Layer       │  Business logic · UI State
+├──────────────────────────────┤
+│        Repository Layer      │  Single source of truth
+├──────────────────────────────┤
+│        Data Source Layer     │  Room Database
+└──────────────────────────────┘
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Android Studio Hedgehog (2023.1.1) or later
+- JDK 11+
+- Android SDK · API Level 21 (Android 5.0) minimum
+
+### Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/thakur-027/The-Blog-App.git
+
+# Open in Android Studio
+# File → Open → Navigate to cloned folder → OK
+# Wait for Gradle sync to complete
+```
+
+### Build & Run
+
+```bash
+# Debug APK (Unix/macOS)
+./gradlew assembleDebug
+
+# Debug APK (Windows)
+gradlew.bat assembleDebug
+```
+
+Or press **Shift + F10** in Android Studio to run directly on your emulator or device.
+
+> **Enable USB Debugging** on a physical device: Settings → About Phone → tap *Build Number* 7× → Developer Options → USB Debugging ✓
+
+---
 
 ## Project Structure
 
 ```
 The-Blog-App/
-├── .idea/                  # Android Studio configuration files
-├── app/                    # Main application module
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/       # Kotlin source files
-│   │   │   ├── res/        # Resources (layouts, drawables, etc.)
-│   │   │   └── AndroidManifest.xml
-│   │   ├── test/           # Unit tests
-│   │   └── androidTest/    # Instrumentation tests
-│   └── build.gradle.kts    # App-level build configuration
-├── contents/               # Content assets and resources
-├── gradle/                 # Gradle wrapper files
-├── .gitignore             # Git ignore rules
-├── build.gradle.kts       # Project-level build configuration
-├── gradle.properties      # Gradle properties
-├── gradlew                # Gradle wrapper script (Unix)
-├── gradlew.bat            # Gradle wrapper script (Windows)
-└── settings.gradle.kts    # Project settings
+├── app/
+│   └── src/main/
+│       ├── java/         # Kotlin source — activities, fragments, VMs, repos
+│       ├── res/          # Layouts, drawables, strings, themes
+│       └── AndroidManifest.xml
+├── contents/             # Screenshots and media assets
+├── build.gradle.kts      # App-level build config
+└── settings.gradle.kts   # Project settings
 ```
-
-## Prerequisites
-
-Before you begin, ensure you have the following installed:
-
-- **Android Studio**: Arctic Fox (2020.3.1) or later
-- **JDK**: Java Development Kit 11 or higher
-- **Kotlin**: 1.5.0 or higher (bundled with Android Studio)
-- **Android SDK**: API Level 21 (Android 5.0) minimum
-- **Git**: For cloning the repository
-
-### System Requirements
-- Minimum 8 GB RAM
-- At least 4 GB of available disk space
-- Windows 7/8/10/11, macOS 10.14+, or Linux (64-bit)
-
-## Installation
-
-### Clone the Repository
-
-```bash
-git clone https://github.com/thakur-027/The-Blog-App.git
-cd The-Blog-App
-```
-
-### Open in Android Studio
-
-1. Launch Android Studio
-2. Select "Open an Existing Project"
-3. Navigate to the cloned repository directory
-4. Click "OK" to open the project
-5. Wait for Gradle sync to complete
-
-### Configure the Project
-
-1. Ensure you have the required Android SDK versions installed
-2. Sync the project with Gradle files (Android Studio usually does this automatically)
-3. Resolve any dependency issues if prompted
-
-## Building the Project
-
-### Using Android Studio
-
-1. Open the project in Android Studio
-2. Select "Build" from the menu bar
-3. Click "Make Project" or press `Ctrl+F9` (Windows/Linux) or `Cmd+F9` (macOS)
-
-### Using Command Line
-
-#### Build Debug APK
-```bash
-# On Unix/macOS
-./gradlew assembleDebug
-
-# On Windows
-gradlew.bat assembleDebug
-```
-
-#### Build Release APK
-```bash
-# On Unix/macOS
-./gradlew assembleRelease
-
-# On Windows
-gradlew.bat assembleRelease
-```
-
-The generated APK will be located in `app/build/outputs/apk/`
-
-### Running Tests
-
-```bash
-# Run unit tests
-./gradlew test
-
-# Run instrumentation tests
-./gradlew connectedAndroidTest
-```
-
-## Usage
-
-### Running on Emulator
-
-1. Open Android Studio
-2. Click "AVD Manager" to create a virtual device (if you haven't already)
-3. Select a device configuration (recommended: Pixel 3 or higher)
-4. Click "Run" or press `Shift+F10`
-5. Select your emulator from the device list
-
-### Running on Physical Device
-
-1. Enable Developer Options on your Android device:
-   - Go to Settings > About Phone
-   - Tap "Build Number" 7 times
-2. Enable USB Debugging:
-   - Go to Settings > Developer Options
-   - Enable "USB Debugging"
-3. Connect your device via USB
-4. Click "Run" in Android Studio
-5. Select your connected device
-
-### App Features Guide
-
-#### Creating a Blog Post
-1. Launch the app
-2. Tap the "+" or "Create" button
-3. Enter your blog title and content
-4. Add optional images or media
-5. Tap "Publish" to save your post
-
-#### Reading Blog Posts
-1. Browse the main feed
-2. Tap on any blog post to read the full content
-3. Use search functionality to find specific posts
-
-#### Managing Your Profile
-1. Navigate to the profile section
-2. Update your user information
-3. View your published posts
-
-## Architecture of the app
-
-This application follows modern Android architecture patterns:
-
-### MVVM (Model-View-ViewModel)
-
-- **Model**: Data layer containing repositories and data sources
-- **View**: UI components (Activities, Fragments, XML layouts)
-- **ViewModel**: Presentation logic and state management
-
-### Layers
-
-```
-┌─────────────────────────────────────┐
-│         Presentation Layer          │
-│    (Activities, Fragments, Views)   │
-└─────────────────────────────────────┘
-                  ↓
-┌─────────────────────────────────────┐
-│         ViewModel Layer             │
-│    (Business Logic, State Mgmt)     │
-└─────────────────────────────────────┘
-                  ↓
-┌─────────────────────────────────────┐
-│         Repository Layer            │
-│      (Data Access Abstraction)      │
-└─────────────────────────────────────┘
-                  ↓
-┌─────────────────────────────────────┐
-│         Data Source Layer           │
-│    (Room Database, Remote API)      │
-└─────────────────────────────────────┘
-```
-
-## Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-3. Commit your changes
-   ```bash
-   git commit -m "Add: your feature description"
-   ```
-4. Push to your branch
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-5. Open a Pull Request
-
-### Code Style Guidelines
-
-- Follow [Kotlin Coding Conventions](https://kotlinlang.org/docs/coding-conventions.html)
-- Use meaningful variable and function names
-- Add comments for complex logic
-- Write unit tests for new features
-- Ensure all tests pass before submitting PR
-
-## Troubleshooting
-
-### Common Issues
-
-#### Gradle Sync Failed
-```bash
-# Clean and rebuild
-./gradlew clean
-./gradlew build
-```
-
-#### Dependency Resolution Issues
-- Update Gradle version in `gradle/wrapper/gradle-wrapper.properties`
-- Sync project with Gradle files
-- Invalidate caches: File > Invalidate Caches / Restart
-
-#### App Crashes on Launch
-- Check Logcat for error messages
-- Verify minimum SDK version compatibility
-- Ensure all required permissions are granted
-
-## Support
-
-For issues, questions, or contributions:
-
-- **GitHub Issues**: [Create an issue](https://github.com/thakur-027/The-Blog-App/issues)
-- **Repository**: [The-Blog-App](https://github.com/thakur-027/The-Blog-App)
-
-## License
-
-This project is open source. Please check the repository for license information.
 
 ---
-
-## Acknowledgments
-
-- Built with ❤️ using Kotlin
-- Android Jetpack Components
-- Material Design Guidelines
 
 ## Roadmap
 
-Future enhancements planned:
-
-- [ ] Image upload functionality
-- [ ] Social sharing features
-- [ ] Offline mode with sync
-- [ ] Rich text editor
+- [ ] Firebase Authentication + cloud sync
+- [ ] Image upload & media attachments
+- [ ] Rich text editor (bold, italic, headings)
 - [ ] Comment system
-- [ ] Categories and tags
-- [ ] User authentication
+- [ ] Categories & tags
+- [ ] Social sharing
 
 ---
 
-**Last Updated**: January 2026
+## Author
 
-For the latest updates and releases, visit the [GitHub repository](https://github.com/thakur-027/The-Blog-App).
+**Ayush Thakur**  
+Pre-final year ECE student @ SMVIT Bengaluru · Android Developer
+
+[![GitHub](https://img.shields.io/badge/GitHub-thakur--027-181717?style=flat-square&logo=github)](https://github.com/thakur-027)
+
+---
+
+## License
+
+This project is open source.
