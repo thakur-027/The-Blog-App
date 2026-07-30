@@ -1,116 +1,80 @@
 package com.example.blogapp
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.blogapp.adapter.BlogAdapter
-import com.example.blogapp.Model.BlogItemModel
 import com.example.blogapp.databinding.ActivityMainBinding
+import com.example.blogapp.viewmodel.FeedViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
-import androidx.activity.enableEdgeToEdge
-
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-    private val binding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
-    }
-
-    private lateinit var databaseReference: DatabaseReference
-    private val blogItems = mutableListOf<BlogItemModel>()
-    private lateinit var auth: FirebaseAuth
+    private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val viewModel: FeedViewModel by viewModels()
+    private lateinit var blogAdapter: BlogAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
 
-
-        //to go to saved article page
         binding.saveArticleButton.setOnClickListener {
             startActivity(Intent(this, SavedArticlesActivity::class.java))
         }
-
-        //to go to profile activity
         binding.profileImage.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
-
-
-
-
-        auth = FirebaseAuth.getInstance()
-
-        // Ensure this matches your "Blogs" or "blogs" path in Firebase
-        databaseReference = FirebaseDatabase.getInstance("https://the-blog-app-157c1-default-rtdb.asia-southeast1.firebasedatabase.app")
-            .getReference("blogs")
-
-        val userId = auth.currentUser?.uid
-
-        //set user profile
-        if (userId != null) {
-            loadUserProfileImage(userId)
-        }
-
-        //set blog post to recyclerview
-
-        //initialize the recyclerview and set adapter
-        val recyclerView = binding.BlogRecyclerView
-        val blogAdapter = BlogAdapter(blogItems)
-        recyclerView.adapter = blogAdapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        //fetch data from firebase database
-        databaseReference.addValueEventListener(object : ValueEventListener{
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onDataChange(snapshot: DataSnapshot) {
-
-                blogItems.clear()
-
-                for(snapshot in snapshot.children){
-                    val blogItem = snapshot.getValue(BlogItemModel::class.java)
-                    if(blogItem != null){
-                        blogItems.add(blogItem)
-                    }
-                }
-
-                blogItems.reverse()
-
-                //notify the adapter that the data has changed
-                blogAdapter.notifyDataSetChanged()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@MainActivity, "blog loading failed", Toast.LENGTH_SHORT).show()
-            }
-        })
-
         binding.floatingAddArticleButton.setOnClickListener {
             startActivity(Intent(this, AddArticleActivity::class.java))
         }
+
+        blogAdapter = BlogAdapter(
+            onLikeClicked = viewModel::onLikeClicked,
+            onSaveClicked = viewModel::onSaveClicked
+        )
+        binding.BlogRecyclerView.apply {
+            adapter = blogAdapter
+            layoutManager = LinearLayoutManager(this@MainActivity)
+        }
+
+        loadUserProfileImage()
+        observeUiState()
     }
 
-    private fun loadUserProfileImage(userId: String) {
-        val userReference = FirebaseDatabase.getInstance("https://the-blog-app-157c1-default-rtdb.asia-southeast1.firebasedatabase.app")
-            .getReference("users").child(userId)
-
-        userReference.child("profileImage").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val profileImageUrl = snapshot.getValue(String::class.java)
-                if (profileImageUrl != null && !isFinishing) {
-                    Glide.with(this@MainActivity)
-                        .load(profileImageUrl)
-                        .into(binding.profileImage)
+    private fun observeUiState() {
+        // repeatOnLifecycle(STARTED) starts collecting when the Activity becomes visible
+        // and cancels the coroutine when it stops. Because BlogRepository's flows are
+        // built with callbackFlow + awaitClose, cancelling this coroutine automatically
+        // detaches the underlying Firebase ValueEventListeners — the leak from the
+        // original MainActivity is gone without writing a single removeEventListener call.
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    blogAdapter.submitList(state.blogs)
+                    state.errorMessage?.let {
+                        Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
+        }
+    }
 
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@MainActivity, "Failed to load profile image", Toast.LENGTH_SHORT).show()
+    private fun loadUserProfileImage() {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        lifecycleScope.launch {
+            val user = viewModel.fetchUserProfile(uid)
+            user?.profileImage?.takeIf { it.isNotBlank() }?.let {
+                Glide.with(this@MainActivity).load(it).into(binding.profileImage)
             }
-        })
+        }
     }
 }

@@ -114,25 +114,23 @@ class SignInAndRegistrationActivity : AppCompatActivity() {
                                 // Save basic data
                                 userReference.child(userId).setValue(userData)
 
-                                // Upload image
+                                // Upload image, and only sign out / navigate away AFTER the
+                                // profileImage URL write succeeds — signing out first meant
+                                // that write happened with no authenticated user and got
+                                // silently rejected once the stricter security rules went live.
                                 val storageReference = storage.reference.child("profile_image/$userId.jpg")
                                 storageReference.putFile(imageUri!!)
                                     .addOnSuccessListener {
                                         storageReference.downloadUrl.addOnSuccessListener { uri ->
-                                            userReference.child(userId).child("profileImage").setValue(uri.toString())
+                                            userReference.child(userId).child("profileImage")
+                                                .setValue(uri.toString())
+                                                .addOnCompleteListener { finishRegistration() }
                                         }
                                     }
-
-                                // FIX: Sign out so they have to login
-                                auth.signOut()
-
-                                Toast.makeText(this, "Registered Successfully! Now Login.", Toast.LENGTH_SHORT).show()
-
-                                // FIX: Redirect to Login state
-                                val intent = Intent(this, SignInAndRegistrationActivity::class.java)
-                                intent.putExtra("action", "login")
-                                startActivity(intent)
-                                finish()
+                                    .addOnFailureListener {
+                                        Toast.makeText(this, "Image upload failed — you can add a photo later from your profile", Toast.LENGTH_SHORT).show()
+                                        finishRegistration()
+                                    }
                             }
                         } else {
                             Toast.makeText(this, "Registration failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
@@ -140,6 +138,15 @@ class SignInAndRegistrationActivity : AppCompatActivity() {
                     }
             }
         }
+    }
+
+    private fun finishRegistration() {
+        auth.signOut()
+        Toast.makeText(this, "Registered Successfully! Now Login.", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, SignInAndRegistrationActivity::class.java)
+        intent.putExtra("action", "login")
+        startActivity(intent)
+        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
